@@ -3,21 +3,31 @@ let gameScene = new Phaser.Scene('Game');
 gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
   this.load.image('player', 'assets/images/playerShip.png');
-  this.load.image('alien', 'assets/images/alienShip.png');
+  this.load.image('alien1', 'assets/images/alienShip1.png');
+  this.load.image('alien2', 'assets/images/alienShip2.png');
+  this.load.image('asteroid1', 'assets/images/asteroid1.png');
+  this.load.image('asteroid2', 'assets/images/asteroid2.png');
 };
 
 gameScene.create = function() {
   let bg = this.add.sprite(0, 0, 'background');
   bg.setOrigin(0, 0);
   
+  //PLAYER SPRITE
   this.player = this.add.sprite(140, 1847/2, 'player');
   this.player.setScale(0.6, 0.6);
 
-  let alien1 = this.add.sprite(4700, 930, 'alien');
+  //ALIEN SPRITES
+  let alien1 = this.add.sprite(4700, 1130, 'alien1');
   alien1.setScale(0.8, 0.8);
-
-  let alien2 = this.add.sprite(4700, 740, 'alien');
+  let alien2 = this.add.sprite(4700, 540, 'alien2');
   alien2.setScale(0.8, 0.8);
+  
+  //ASTEROID SPRITES
+  let asteroid1 = this.add.sprite(3150, 340, 'asteroid1');
+  asteroid1.setScale(0.8, 0.8);
+  let asteroid2 = this.add.sprite(2350, 1300, 'asteroid2');
+  asteroid2.setScale(0.8, 0.8);
 };
 
 gameScene.update = function(time, delta) {
@@ -41,6 +51,11 @@ gameScene.update = function(time, delta) {
   if (keyD.isDown) {
     player.x += speed * delta / 1000;
   }
+
+  /* check for active input then walk (change this to shoot lasers)
+   if(this.input.activePointer.isDown) {
+     this.player.x += speed * delta / 1000;
+  }   */
 };
 
 let config = {
