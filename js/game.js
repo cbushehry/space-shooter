@@ -18,10 +18,10 @@ gameScene.create = function() {
   this.player.setScale(0.7);
 
   //ALIEN SPRITES
-  let alien1 = this.add.sprite(4700, 1130, 'alien1');
-  alien1.setScale(0.8);
-  let alien2 = this.add.sprite(4700, 540, 'alien2');
-  alien2.setScale(0.8);
+  this.alien1 = this.add.sprite(4700, 1130, 'alien1');
+  this.alien1.setScale(0.8);
+  this.alien2 = this.add.sprite(4700, 540, 'alien2');
+  this.alien2.setScale(0.8);
   
   //ASTEROID SPRITES
   this.asteroid1 = this.add.sprite(3150, 340, 'asteroid1');
