@@ -15,19 +15,19 @@ gameScene.create = function() {
   
   //PLAYER SPRITE
   this.player = this.add.sprite(140, 1847/2, 'player');
-  this.player.setScale(0.6, 0.6);
+  this.player.setScale(0.7);
 
   //ALIEN SPRITES
   let alien1 = this.add.sprite(4700, 1130, 'alien1');
-  alien1.setScale(0.8, 0.8);
+  alien1.setScale(0.8);
   let alien2 = this.add.sprite(4700, 540, 'alien2');
-  alien2.setScale(0.8, 0.8);
+  alien2.setScale(0.8);
   
   //ASTEROID SPRITES
-  let asteroid1 = this.add.sprite(3150, 340, 'asteroid1');
-  asteroid1.setScale(0.8, 0.8);
-  let asteroid2 = this.add.sprite(2350, 1300, 'asteroid2');
-  asteroid2.setScale(0.8, 0.8);
+  this.asteroid1 = this.add.sprite(3150, 340, 'asteroid1');
+  this.asteroid1.setScale(0.7);
+  this.asteroid2 = this.add.sprite(2350, 1300, 'asteroid2');
+  this.asteroid2.setScale(0.7);
 };
 
 gameScene.update = function(time, delta) {
@@ -55,7 +55,16 @@ gameScene.update = function(time, delta) {
   /* check for active input then walk (change this to shoot lasers)
    if(this.input.activePointer.isDown) {
      this.player.x += speed * delta / 1000;
-  }   */
+  }  
+
+  let playerRect = this.player.getBounds();
+  let asteroid1Rect = this.asteroid1.getBounds();
+
+  if(Phaser.Geom.Intersects.RectangleToRectangle(playerRect, asteroid1Rect)) {
+    console.log('you Crashed!');
+      this.scene.restart();
+      return;
+    }  */
 };
 
 let config = {
