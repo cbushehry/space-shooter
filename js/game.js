@@ -14,20 +14,20 @@ gameScene.create = function() {
   bg.setOrigin(0, 1);
   
   //PLAYER SPRITE
-  this.player = this.add.sprite(1847/2, 4819, 'player');
-  this.player.setScale(0.7);
+  this.player = this.add.sprite(1570/2, 4900, 'player');
+  this.player.setScale(0.4);
 
   //ALIEN SPRITES
-  this.alien1 = this.add.sprite(1130, 4700, 'alien1');
-  this.alien1.setScale(0.8);
-  this.alien2 = this.add.sprite(540, 4700, 'alien2');
-  this.alien2.setScale(0.8);
+  this.alien1 = this.add.sprite(1130, 100, 'alien1');
+  this.alien1.setScale(0.5);
+  this.alien2 = this.add.sprite(1540/2, 4400, 'alien2');
+  this.alien2.setScale(0.5);
   
   //ASTEROID SPRITES
   this.asteroid1 = this.add.sprite(350, 3140, 'asteroid1');
-  this.asteroid1.setScale(0.7);
+  this.asteroid1.setScale(0.3);
   this.asteroid2 = this.add.sprite(1350, 2300, 'asteroid2');
-  this.asteroid2.setScale(0.7);
+  this.asteroid2.setScale(0.3);
 
   // CAMERA SETTINGS
   this.cameras.main.startFollow(this.player);
@@ -73,8 +73,10 @@ gameScene.update = function(time, delta) {
 
 let config = {
   type: Phaser.AUTO,
-  width: 1570,
-  height: 769,
+  //width: 1570,
+  //height: 769,
+  width: 1847,
+  height: 5119,
   scene: gameScene
 };
 
