@@ -16,6 +16,8 @@ gameScene.create = function() {
   //PLAYER SPRITE
   this.player = this.add.sprite(1570/2, 4900, 'player');
   this.player.setScale(0.4);
+  this.player.setOrigin(0.34, 0.5);
+  this.player.angle = 270;
 
   //ALIEN SPRITES
   this.alien1 = this.add.sprite(1130, 100, 'alien1');
@@ -41,7 +43,8 @@ gameScene.update = function(time, delta) {
   let keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
   let keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-  let player = this.player;  // Now you can access player as it was assigned in `create`
+  let player = this.player;  
+  let pointer = this.input.activePointer;
   
   if (keyW.isDown) {
     player.y -= speed * delta / 1000;
@@ -54,6 +57,14 @@ gameScene.update = function(time, delta) {
   }
   if (keyD.isDown) {
     player.x += speed * delta / 1000;
+  }
+
+  if (pointer.isDown) {
+    let angle = Phaser.Math.Angle.Between(
+      player.x, player.y,
+      pointer.worldX, pointer.worldY
+    );
+    player.rotation = angle;
   }
 
   /* check for active input then walk (change this to shoot lasers)
@@ -73,10 +84,10 @@ gameScene.update = function(time, delta) {
 
 let config = {
   type: Phaser.AUTO,
-  //width: 1570,
-  //height: 769,
-  width: 1847,
-  height: 5119,
+  width: 1570,
+  height: 769,
+  //width: 1847,
+  //height: 5119,
   scene: gameScene
 };
 
