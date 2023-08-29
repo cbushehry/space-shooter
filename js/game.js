@@ -52,7 +52,7 @@ gameScene.update = function(time, delta) {
     player.x += speed * delta / 1000;
   }
 
-  /* check for active input then walk (change this to shoot lasers)
+// check for active input then walk (change this to shoot lasers)
    if(this.input.activePointer.isDown) {
      this.player.x += speed * delta / 1000;
   }  
@@ -64,13 +64,13 @@ gameScene.update = function(time, delta) {
     console.log('you Crashed!');
       this.scene.restart();
       return;
-    }  */
+    }
 };
 
 let config = {
   type: Phaser.AUTO,
-  width: 5119,
-  height: 1847,
+  width: 1847,
+  height: 5119,
   scene: gameScene
 };
 
