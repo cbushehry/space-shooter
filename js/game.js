@@ -24,13 +24,14 @@ gameScene.create = function() {
   
   //PLAYER SPRITE
   this.player = this.add.sprite(1570/2, 4900, 'player');
-  this.player.setScale(0.3);
+  this.player.setScale(1);
   this.player.setOrigin(0.34, 0.5);
   this.player.angle = 270;
 
   // CAMERA SETTINGS
   this.cameras.main.startFollow(this.player);
   this.cameras.main.setBounds(0, 0, 1847, 5119);
+  this.cameras.main.setZoom(0.25);
 };
 
 gameScene.update = function(time, delta) {
