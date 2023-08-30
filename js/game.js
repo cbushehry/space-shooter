@@ -10,10 +10,16 @@ gameScene.preload = function() {
 };
 
 gameScene.create = function() {
-  this.bg1 = this.add.sprite(0, 0, 'background');
-  this.bg2 = this.add.sprite(0, -this.bg1.height, 'background');
-  this.bg1.setOrigin(0, 0);
-  this.bg2.setOrigin(0, 0);
+  //BACKGROUND SPRITE
+  this.bg1 = this.add.sprite(0, 0, 'background').setOrigin(0, 0);
+  this.bg2 = this.add.sprite(0, -this.bg1.height, 'background').setOrigin(0, 0);
+  this.bg3 = this.add.sprite(this.bg1.width, 0, 'background').setOrigin(0, 0);
+  this.bg4 = this.add.sprite(-this.bg1.width, 0, 'background').setOrigin(0, 0);
+  this.bg5 = this.add.sprite(0, this.bg1.height, 'background').setOrigin(0, 0);
+  this.bg6 = this.add.sprite(this.bg1.width, this.bg1.height, 'background').setOrigin(0, 0);
+  this.bg7 = this.add.sprite(-this.bg1.width, this.bg1.height, 'background').setOrigin(0, 0);
+  this.bg8 = this.add.sprite(this.bg1.width, -this.bg1.height, 'background').setOrigin(0, 0);
+  this.bg9 = this.add.sprite(-this.bg1.width, -this.bg1.height, 'background').setOrigin(0, 0);
   
   //PLAYER SPRITE
   this.player = this.add.sprite(1570/2, 4900, 'player');
@@ -45,21 +51,22 @@ gameScene.update = function(time, delta) {
   let keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   let keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
   let keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-
   let player = this.player;  
   let pointer = this.input.activePointer;
-  
+  let dx = 0;
+  let dy = 0;
+
   if (keyW.isDown) {
-    player.y -= speed * delta / 1000;
+    dy = -speed * delta / 1000;
   }
   if (keyA.isDown) {
-    player.x -= speed * delta / 1000;
+    dx = -speed * delta / 1000;
   }
   if (keyS.isDown) {
-    player.y += speed * delta / 1000;
+    dy = speed * delta / 1000;
   }
   if (keyD.isDown) {
-    player.x += speed * delta / 1000;
+    dx = speed * delta / 1000;
   }
 
   if (pointer.isDown) {
@@ -70,21 +77,26 @@ gameScene.update = function(time, delta) {
     player.rotation = angle;
   }
 
-  this.bg1.y += bgScrollSpeed * delta / 1000;
-  this.bg2.y += bgScrollSpeed * delta / 1000;
+  // Update background positions
+  let bgSprites = [this.bg1, this.bg2, this.bg3, this.bg4, this.bg5, this.bg6, this.bg7, this.bg8, this.bg9];
+  bgSprites.forEach(bg => {
+    bg.x -= dx;
+    bg.y -= dy - bgScrollSpeed * delta / 1000;
 
-  if (this.bg1.y >= this.bg1.height) {
-    this.bg1.y = this.bg2.y - this.bg1.height;
-  }
-  if (this.bg2.y >= this.bg1.height) {
-    this.bg2.y = this.bg1.y - this.bg2.height;
-  }
+    // Loop background horizontally
+    if (bg.x > this.bg1.width) bg.x -= this.bg1.width * 3;
+    if (bg.x < -this.bg1.width) bg.x += this.bg1.width * 3;
+
+    // Loop background vertically
+    if (bg.y > this.bg1.height) bg.y -= this.bg1.height * 3;
+    if (bg.y < -this.bg1.height) bg.y += this.bg1.height * 3;
+  });
 };
 
 let config = {
   type: Phaser.AUTO,
   width: 1570,
-  height: 769,
+  height: 729,
   //width: 1847,
   //height: 5119,
   scene: gameScene
