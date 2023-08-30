@@ -1,12 +1,13 @@
 let gameScene = new Phaser.Scene('Game');
 
+const KEY_W = Phaser.Input.Keyboard.KeyCodes.W;
+const KEY_A = Phaser.Input.Keyboard.KeyCodes.A;
+const KEY_S = Phaser.Input.Keyboard.KeyCodes.S;
+const KEY_D = Phaser.Input.Keyboard.KeyCodes.D;
+
 gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
   this.load.image('player', 'assets/images/playerShip.png');
-  this.load.image('alien1', 'assets/images/alienShip1.png');
-  this.load.image('alien2', 'assets/images/alienShip2.png');
-  this.load.image('asteroid1', 'assets/images/asteroid1.png');
-  this.load.image('asteroid2', 'assets/images/asteroid2.png');
 };
 
 gameScene.create = function() {
@@ -23,21 +24,9 @@ gameScene.create = function() {
   
   //PLAYER SPRITE
   this.player = this.add.sprite(1570/2, 4900, 'player');
-  this.player.setScale(0.4);
+  this.player.setScale(0.3);
   this.player.setOrigin(0.34, 0.5);
   this.player.angle = 270;
-
-  //ALIEN SPRITES
-  this.alien1 = this.add.sprite(1130, 100, 'alien1');
-  this.alien1.setScale(0.5);
-  this.alien2 = this.add.sprite(1540/2, 4400, 'alien2');
-  this.alien2.setScale(0.5);
-  
-  //ASTEROID SPRITES
-  this.asteroid1 = this.add.sprite(350, 3140, 'asteroid1');
-  this.asteroid1.setScale(0.3);
-  this.asteroid2 = this.add.sprite(1350, 2300, 'asteroid2');
-  this.asteroid2.setScale(0.3);
 
   // CAMERA SETTINGS
   this.cameras.main.startFollow(this.player);
@@ -47,10 +36,10 @@ gameScene.create = function() {
 gameScene.update = function(time, delta) {
   let speed = 200;
   let bgScrollSpeed = 10;
-  let keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-  let keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-  let keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-  let keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+  let keyW = this.input.keyboard.addKey(KEY_W);
+  let keyA = this.input.keyboard.addKey(KEY_A);
+  let keyS = this.input.keyboard.addKey(KEY_S);
+  let keyD = this.input.keyboard.addKey(KEY_D);
   let player = this.player;  
   let pointer = this.input.activePointer;
   let dx = 0;
@@ -95,11 +84,13 @@ gameScene.update = function(time, delta) {
 
 let config = {
   type: Phaser.AUTO,
-  width: 1570,
-  height: 729,
-  //width: 1847,
-  //height: 5119,
-  scene: gameScene
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  width: 1200, // your default width
+  height: 600, // your default height
+  scene: gameScene,
 };
 
 let game = new Phaser.Game(config);
