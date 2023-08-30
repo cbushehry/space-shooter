@@ -66,20 +66,6 @@ gameScene.update = function(time, delta) {
     );
     player.rotation = angle;
   }
-
-  /* check for active input then walk (change this to shoot lasers)
-   if(this.input.activePointer.isDown) {
-     this.player.x += speed * delta / 1000;
-  }  
-
-  let playerRect = this.player.getBounds();
-  let asteroid1Rect = this.asteroid1.getBounds();
-
-  if(Phaser.Geom.Intersects.RectangleToRectangle(playerRect, asteroid1Rect)) {
-    console.log('you Crashed!');
-      this.scene.restart();
-      return;
-    } */
 };
 
 let config = {
