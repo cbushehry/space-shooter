@@ -10,8 +10,10 @@ gameScene.preload = function() {
 };
 
 gameScene.create = function() {
-  let bg = this.add.sprite(0, 5119, 'background');
-  bg.setOrigin(0, 1);
+  this.bg1 = this.add.sprite(0, 0, 'background');
+  this.bg2 = this.add.sprite(0, -this.bg1.height, 'background');
+  this.bg1.setOrigin(0, 0);
+  this.bg2.setOrigin(0, 0);
   
   //PLAYER SPRITE
   this.player = this.add.sprite(1570/2, 4900, 'player');
@@ -37,7 +39,8 @@ gameScene.create = function() {
 };
 
 gameScene.update = function(time, delta) {
-  let speed = 500;
+  let speed = 200;
+  let bgScrollSpeed = 10;
   let keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   let keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   let keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -65,6 +68,16 @@ gameScene.update = function(time, delta) {
       pointer.worldX, pointer.worldY
     );
     player.rotation = angle;
+  }
+
+  this.bg1.y += bgScrollSpeed * delta / 1000;
+  this.bg2.y += bgScrollSpeed * delta / 1000;
+
+  if (this.bg1.y >= this.bg1.height) {
+    this.bg1.y = this.bg2.y - this.bg1.height;
+  }
+  if (this.bg2.y >= this.bg1.height) {
+    this.bg2.y = this.bg1.y - this.bg2.height;
   }
 };
 
