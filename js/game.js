@@ -18,17 +18,21 @@ gameScene.preload = function() {
 };
 
 gameScene.create = function() {
-  //BACKGROUND SPRITE
-  this.bg1 = this.add.sprite(0, 0, 'background').setOrigin(0, 0);
-  this.bg2 = this.add.sprite(0, -BG_HEIGHT, 'background').setOrigin(0, 0);
-  this.bg3 = this.add.sprite(BG_WIDTH, 0, 'background').setOrigin(0, 0);
-  this.bg4 = this.add.sprite(-BG_WIDTH, 0, 'background').setOrigin(0, 0);
-  this.bg5 = this.add.sprite(0, BG_HEIGHT, 'background').setOrigin(0, 0);
-  this.bg6 = this.add.sprite(BG_WIDTH, BG_HEIGHT, 'background').setOrigin(0, 0);
-  this.bg7 = this.add.sprite(-BG_WIDTH, BG_HEIGHT, 'background').setOrigin(0, 0);
-  this.bg8 = this.add.sprite(BG_WIDTH, -BG_HEIGHT, 'background').setOrigin(0, 0);
-  this.bg9 = this.add.sprite(-BG_WIDTH, -BG_HEIGHT, 'background').setOrigin(0, 0);
-  
+  // Background sprite grid size
+  const cols = 3;
+  const rows = 3;
+
+  // Initialize background sprites in a loop
+  this.bgSprites = [];
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      const x = (i - 1) * BG_WIDTH;
+      const y = (j - 1) * BG_HEIGHT;
+      const bg = this.add.sprite(x, y, 'background').setOrigin(0, 0);
+      this.bgSprites.push(bg);
+    }
+  }
+
   //PLAYER SPRITE
   this.player = this.add.sprite(BG_WIDTH / 2, BG_HEIGHT / 2, 'player');
   this.player.setScale(PLAYER_INITIAL_SCALE);
@@ -84,18 +88,17 @@ gameScene.update = function(time, delta) {
   }
 
   // Update background positions
-  let bgSprites = [this.bg1, this.bg2, this.bg3, this.bg4, this.bg5, this.bg6, this.bg7, this.bg8, this.bg9];
-  bgSprites.forEach(bg => {
+  this.bgSprites.forEach(bg => {
     bg.x -= dx;
     bg.y -= dy - bgScrollSpeed * delta / 1000;
 
     // Loop background horizontally
-    if (bg.x > this.bg1.width) bg.x -= this.bg1.width * 3;
-    if (bg.x < -this.bg1.width) bg.x += this.bg1.width * 3;
+    if (bg.x > BG_WIDTH) bg.x -= BG_WIDTH * 3;
+    if (bg.x < -BG_WIDTH) bg.x += BG_WIDTH * 3;
 
     // Loop background vertically
-    if (bg.y > this.bg1.height) bg.y -= this.bg1.height * 3;
-    if (bg.y < -this.bg1.height) bg.y += this.bg1.height * 3;
+    if (bg.y > BG_HEIGHT) bg.y -= BG_HEIGHT * 3;
+    if (bg.y < -BG_HEIGHT) bg.y += BG_HEIGHT * 3;
   });
 };
 
