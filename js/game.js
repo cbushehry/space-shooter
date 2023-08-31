@@ -5,44 +5,48 @@ const KEY_A = Phaser.Input.Keyboard.KeyCodes.A;
 const KEY_S = Phaser.Input.Keyboard.KeyCodes.S;
 const KEY_D = Phaser.Input.Keyboard.KeyCodes.D;
 
+const BG_WIDTH = 1847;
+const BG_HEIGHT = 1706;
+const PLAYER_INITIAL_SCALE = 0.4;
+const PLAYER_INITIAL_ANGLE = 270;
+const PLAYER_SPEED = 500;
+const BG_SCROLL_SPEED = 10;
+
 gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
   this.load.image('player', 'assets/images/playerShip.png');
 };
 
 gameScene.create = function() {
-  const bgWidth = 1847;
-  const bgHeight = 1706;
-
   //BACKGROUND SPRITE
   this.bg1 = this.add.sprite(0, 0, 'background').setOrigin(0, 0);
-  this.bg2 = this.add.sprite(0, -bgHeight, 'background').setOrigin(0, 0);
-  this.bg3 = this.add.sprite(bgWidth, 0, 'background').setOrigin(0, 0);
-  this.bg4 = this.add.sprite(-bgWidth, 0, 'background').setOrigin(0, 0);
-  this.bg5 = this.add.sprite(0, bgHeight, 'background').setOrigin(0, 0);
-  this.bg6 = this.add.sprite(bgWidth, bgHeight, 'background').setOrigin(0, 0);
-  this.bg7 = this.add.sprite(-bgWidth, bgHeight, 'background').setOrigin(0, 0);
-  this.bg8 = this.add.sprite(bgWidth, -bgHeight, 'background').setOrigin(0, 0);
-  this.bg9 = this.add.sprite(-bgWidth, -bgHeight, 'background').setOrigin(0, 0);
+  this.bg2 = this.add.sprite(0, -BG_HEIGHT, 'background').setOrigin(0, 0);
+  this.bg3 = this.add.sprite(BG_WIDTH, 0, 'background').setOrigin(0, 0);
+  this.bg4 = this.add.sprite(-BG_WIDTH, 0, 'background').setOrigin(0, 0);
+  this.bg5 = this.add.sprite(0, BG_HEIGHT, 'background').setOrigin(0, 0);
+  this.bg6 = this.add.sprite(BG_WIDTH, BG_HEIGHT, 'background').setOrigin(0, 0);
+  this.bg7 = this.add.sprite(-BG_WIDTH, BG_HEIGHT, 'background').setOrigin(0, 0);
+  this.bg8 = this.add.sprite(BG_WIDTH, -BG_HEIGHT, 'background').setOrigin(0, 0);
+  this.bg9 = this.add.sprite(-BG_WIDTH, -BG_HEIGHT, 'background').setOrigin(0, 0);
   
   //PLAYER SPRITE
-  this.player = this.add.sprite(bgWidth / 2, bgHeight / 2, 'player');
-  this.player.setScale(0.4);
-  this.player.setOrigin(0.4, 0.5);
-  this.player.angle = 270;
+  this.player = this.add.sprite(BG_WIDTH / 2, BG_HEIGHT / 2, 'player');
+  this.player.setScale(PLAYER_INITIAL_SCALE);
+  this.player.setOrigin(0.4, 0.5);  // setOrigin(0.4, 0.5) so playerShip spins from the thruster instead of middle of spaceship
+  this.player.angle = PLAYER_INITIAL_ANGLE;
 
   // CAMERA SETTINGS
   this.cameras.main.startFollow(this.player);
-  this.cameras.main.setBounds(0, 0, bgWidth, bgHeight);
-  const zoomFactor = Math.min(config.width / bgWidth, config.height / bgHeight);
+  this.cameras.main.setBounds(0, 0, BG_WIDTH, BG_HEIGHT);
+  const zoomFactor = Math.min(config.width / BG_WIDTH, config.height / BG_HEIGHT);
   this.cameras.main.setZoom(zoomFactor);
 
   const cameraPadding = 0; // Adjust based on your needs
   this.cameras.main.setBounds(
     cameraPadding, 
     cameraPadding, 
-    bgWidth - cameraPadding * 2, 
-    bgHeight - cameraPadding * 2
+    BG_WIDTH - cameraPadding * 2, 
+    BG_HEIGHT - cameraPadding * 2
   );
 };
 
@@ -52,9 +56,9 @@ gameScene.update = function(time, delta) {
   let keyS = this.input.keyboard.addKey(KEY_S);
   let keyD = this.input.keyboard.addKey(KEY_D);
   let pointer = this.input.activePointer;
+  let bgScrollSpeed = BG_SCROLL_SPEED;
   let player = this.player;
-  let bgScrollSpeed = 10;
-  let speed = 500;
+  let speed = PLAYER_SPEED;
   let dx = 0;
   let dy = 0;
 
