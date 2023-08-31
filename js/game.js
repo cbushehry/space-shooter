@@ -23,26 +23,34 @@ gameScene.create = function() {
   this.bg9 = this.add.sprite(-this.bg1.width, -this.bg1.height, 'background').setOrigin(0, 0);
   
   //PLAYER SPRITE
-  this.player = this.add.sprite(1570/2, 4900, 'player');
-  this.player.setScale(1);
+  this.player = this.add.sprite(1847 / 2, 5119 / 2, 'player');
+  this.player.setScale(0.67);
   this.player.setOrigin(0.34, 0.5);
   this.player.angle = 270;
 
   // CAMERA SETTINGS
   this.cameras.main.startFollow(this.player);
   this.cameras.main.setBounds(0, 0, 1847, 5119);
-  this.cameras.main.setZoom(0.25);
+  this.cameras.main.setZoom(0.30);
+
+  const cameraPadding = -400; // Adjust based on your needs
+  this.cameras.main.setBounds(
+    cameraPadding, 
+    cameraPadding, 
+    1847 - cameraPadding * 2, 
+    5119 - cameraPadding * 2
+  );
 };
 
 gameScene.update = function(time, delta) {
-  let speed = 200;
-  let bgScrollSpeed = 10;
   let keyW = this.input.keyboard.addKey(KEY_W);
   let keyA = this.input.keyboard.addKey(KEY_A);
   let keyS = this.input.keyboard.addKey(KEY_S);
   let keyD = this.input.keyboard.addKey(KEY_D);
-  let player = this.player;  
   let pointer = this.input.activePointer;
+  let player = this.player;
+  let bgScrollSpeed = 10;
+  let speed = 400;
   let dx = 0;
   let dy = 0;
 
@@ -89,8 +97,8 @@ let config = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  width: 1200, // your default width
-  height: 600, // your default height
+  width: 800,
+  height: 600,
   scene: gameScene,
 };
 
