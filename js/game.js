@@ -18,7 +18,7 @@ gameScene.preload = function() {
 };
 
 gameScene.create = function() {
-  // Background sprite grid size
+  // BACKGROUND SPRITE grid size
   const cols = 3;
   const rows = 3;
 
@@ -32,6 +32,12 @@ gameScene.create = function() {
       this.bgSprites.push(bg);
     }
   }
+
+  // Initialize keyboard inputs and store them as properties
+  this.keyW = this.input.keyboard.addKey(KEY_W);
+  this.keyA = this.input.keyboard.addKey(KEY_A);
+  this.keyS = this.input.keyboard.addKey(KEY_S);
+  this.keyD = this.input.keyboard.addKey(KEY_D);
 
   //PLAYER SPRITE
   this.player = this.add.sprite(BG_WIDTH / 2, BG_HEIGHT / 2, 'player');
@@ -55,10 +61,6 @@ gameScene.create = function() {
 };
 
 gameScene.update = function(time, delta) {
-  let keyW = this.input.keyboard.addKey(KEY_W);
-  let keyA = this.input.keyboard.addKey(KEY_A);
-  let keyS = this.input.keyboard.addKey(KEY_S);
-  let keyD = this.input.keyboard.addKey(KEY_D);
   let pointer = this.input.activePointer;
   let bgScrollSpeed = BG_SCROLL_SPEED;
   let player = this.player;
@@ -66,16 +68,17 @@ gameScene.update = function(time, delta) {
   let dx = 0;
   let dy = 0;
 
-  if (keyW.isDown) {
+  // You can directly use this.keyW, this.keyA, this.keyS, this.keyD
+  if (this.keyW.isDown) {
     dy = -speed * delta / 1000;
   }
-  if (keyA.isDown) {
+  if (this.keyA.isDown) {
     dx = -speed * delta / 1000;
   }
-  if (keyS.isDown) {
+  if (this.keyS.isDown) {
     dy = speed * delta / 1000;
   }
-  if (keyD.isDown) {
+  if (this.keyD.isDown) {
     dx = speed * delta / 1000;
   }
 
