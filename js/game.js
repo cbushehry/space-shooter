@@ -11,34 +11,38 @@ gameScene.preload = function() {
 };
 
 gameScene.create = function() {
+  const bgWidth = 1847;
+  const bgHeight = 1706;
+
   //BACKGROUND SPRITE
   this.bg1 = this.add.sprite(0, 0, 'background').setOrigin(0, 0);
-  this.bg2 = this.add.sprite(0, -this.bg1.height, 'background').setOrigin(0, 0);
-  this.bg3 = this.add.sprite(this.bg1.width, 0, 'background').setOrigin(0, 0);
-  this.bg4 = this.add.sprite(-this.bg1.width, 0, 'background').setOrigin(0, 0);
-  this.bg5 = this.add.sprite(0, this.bg1.height, 'background').setOrigin(0, 0);
-  this.bg6 = this.add.sprite(this.bg1.width, this.bg1.height, 'background').setOrigin(0, 0);
-  this.bg7 = this.add.sprite(-this.bg1.width, this.bg1.height, 'background').setOrigin(0, 0);
-  this.bg8 = this.add.sprite(this.bg1.width, -this.bg1.height, 'background').setOrigin(0, 0);
-  this.bg9 = this.add.sprite(-this.bg1.width, -this.bg1.height, 'background').setOrigin(0, 0);
+  this.bg2 = this.add.sprite(0, -bgHeight, 'background').setOrigin(0, 0);
+  this.bg3 = this.add.sprite(bgWidth, 0, 'background').setOrigin(0, 0);
+  this.bg4 = this.add.sprite(-bgWidth, 0, 'background').setOrigin(0, 0);
+  this.bg5 = this.add.sprite(0, bgHeight, 'background').setOrigin(0, 0);
+  this.bg6 = this.add.sprite(bgWidth, bgHeight, 'background').setOrigin(0, 0);
+  this.bg7 = this.add.sprite(-bgWidth, bgHeight, 'background').setOrigin(0, 0);
+  this.bg8 = this.add.sprite(bgWidth, -bgHeight, 'background').setOrigin(0, 0);
+  this.bg9 = this.add.sprite(-bgWidth, -bgHeight, 'background').setOrigin(0, 0);
   
   //PLAYER SPRITE
-  this.player = this.add.sprite(1847 / 2, 5119 / 2, 'player');
-  this.player.setScale(0.67);
-  this.player.setOrigin(0.34, 0.5);
+  this.player = this.add.sprite(bgWidth / 2, bgHeight / 2, 'player');
+  this.player.setScale(0.4);
+  this.player.setOrigin(0.4, 0.5);
   this.player.angle = 270;
 
   // CAMERA SETTINGS
   this.cameras.main.startFollow(this.player);
-  this.cameras.main.setBounds(0, 0, 1847, 5119);
-  this.cameras.main.setZoom(0.30);
+  this.cameras.main.setBounds(0, 0, bgWidth, bgHeight);
+  const zoomFactor = Math.min(config.width / bgWidth, config.height / bgHeight);
+  this.cameras.main.setZoom(zoomFactor);
 
-  const cameraPadding = -400; // Adjust based on your needs
+  const cameraPadding = 0; // Adjust based on your needs
   this.cameras.main.setBounds(
     cameraPadding, 
     cameraPadding, 
-    1847 - cameraPadding * 2, 
-    5119 - cameraPadding * 2
+    bgWidth - cameraPadding * 2, 
+    bgHeight - cameraPadding * 2
   );
 };
 
@@ -50,7 +54,7 @@ gameScene.update = function(time, delta) {
   let pointer = this.input.activePointer;
   let player = this.player;
   let bgScrollSpeed = 10;
-  let speed = 400;
+  let speed = 500;
   let dx = 0;
   let dy = 0;
 
@@ -97,8 +101,8 @@ let config = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  width: 800,
-  height: 600,
+  width: 987,
+  height: 876,
   scene: gameScene,
 };
 
