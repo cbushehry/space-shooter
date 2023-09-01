@@ -10,10 +10,10 @@ const KEY_D = Phaser.Input.Keyboard.KeyCodes.D;
 // Define constants for game settings
 const BG_WIDTH = 1847;
 const BG_HEIGHT = 1706;
+const BG_SCROLL_SPEED = 10;
 const PLAYER_INITIAL_SCALE = 0.4;
 const PLAYER_INITIAL_ANGLE = 270;
-const PLAYER_SPEED = 250;
-const BG_SCROLL_SPEED = 10;
+const PLAYER_SPEED = 200;
 
 // Preload assets
 gameScene.preload = function() {
@@ -90,8 +90,8 @@ gameScene.update = function(time, delta) {
     player.rotation = angle;
   }
 
-  // playerShip fires laser when SPACE is cicked
-  if (Phaser.Input.Keyboard.JustDown(this.shootKey)) {
+   // playerShip fires laser when SPACE is clicked
+   if (Phaser.Input.Keyboard.JustDown(this.shootKey)) {
     this.shootLaser();
   }
 
@@ -110,6 +110,15 @@ gameScene.update = function(time, delta) {
     if (bg.y > BG_HEIGHT) bg.y -= BG_HEIGHT * 3;
     if (bg.y < -BG_HEIGHT) bg.y += BG_HEIGHT * 3;
   });
+
+  // Add this block of code to update lasers to move with background
+  this.lasers.getChildren().forEach(laser => {
+    laser.x -= dx;
+    laser.y -= dy - bgScrollSpeed * delta / 1000;
+    if (laser.x < 0 || laser.x > BG_WIDTH || laser.y < 0 || laser.y > BG_HEIGHT) {
+      laser.destroy();
+    }
+  });
 };
 
 // Method to shoot lasers
@@ -125,8 +134,8 @@ gameScene.shootLaser = function() {
   const angleInRadians = this.player.rotation;
   
   // Calculate the velocity components based on the angle
-  const velocityX = Math.cos(angleInRadians) * 200;
-  const velocityY = Math.sin(angleInRadians) * 200;
+  const velocityX = Math.cos(angleInRadians) * 800;
+  const velocityY = Math.sin(angleInRadians) * 800;
   
   laser.setVelocity(velocityX, velocityY);
 };
