@@ -13,7 +13,8 @@ const BG_HEIGHT = 1706;
 const BG_SCROLL_SPEED = 10;
 const PLAYER_INITIAL_SCALE = 0.4;
 const PLAYER_INITIAL_ANGLE = 270;
-const PLAYER_SPEED = 200;
+const PLAYER_SPEED = 250;
+const LASER_SPEED = 1000;
 
 // Preload assets
 gameScene.preload = function() {
@@ -134,8 +135,8 @@ gameScene.shootLaser = function() {
   const angleInRadians = this.player.rotation;
   
   // Calculate the velocity components based on the angle
-  const velocityX = Math.cos(angleInRadians) * 800;
-  const velocityY = Math.sin(angleInRadians) * 800;
+  const velocityX = Math.cos(angleInRadians) * LASER_SPEED;
+  const velocityY = Math.sin(angleInRadians) * LASER_SPEED;
   
   laser.setVelocity(velocityX, velocityY);
 };
