@@ -12,7 +12,7 @@ const BG_WIDTH = 1847;
 const BG_HEIGHT = 1706;
 const PLAYER_INITIAL_SCALE = 0.4;
 const PLAYER_INITIAL_ANGLE = 270;
-const PLAYER_SPEED = 500;
+const PLAYER_SPEED = 250;
 const BG_SCROLL_SPEED = 10;
 
 // Preload assets
@@ -48,6 +48,7 @@ gameScene.create = function() {
   this.player.setScale(PLAYER_INITIAL_SCALE);
   this.player.setOrigin(0.4, 0.5);  //player.setOrigin(0.4, 0.5) so playerShip spins from thrusters
   this.player.angle = PLAYER_INITIAL_ANGLE;
+  this.player.setDepth(1);
 
   // Initialize laser sprite
   this.lasers = this.physics.add.group();
@@ -115,6 +116,10 @@ gameScene.update = function(time, delta) {
 gameScene.shootLaser = function() {
   let laser = this.lasers.create(this.player.x, this.player.y, 'laser1');
   laser.setScale(0.2);
+  
+  // Set the laser's rotation to match the player's rotation
+  laser.rotation = this.player.rotation;
+  laser.setDepth(0);
   
   // The player's angle in radians
   const angleInRadians = this.player.rotation;
