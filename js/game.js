@@ -19,6 +19,7 @@ const BG_SCROLL_SPEED = 10;
 gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
   this.load.image('player', 'assets/images/playerShip.png');
+  this.load.image('laser1', 'assets/images/laser1.png');
 };
 
 // Create game objects and initialize settings
@@ -47,6 +48,10 @@ gameScene.create = function() {
   this.player.setScale(PLAYER_INITIAL_SCALE);
   this.player.setOrigin(0.4, 0.5);  //player.setOrigin(0.4, 0.5) so playerShip spins from thrusters
   this.player.angle = PLAYER_INITIAL_ANGLE;
+
+  // Initialize laser sprite
+  this.lasers = this.physics.add.group();
+  this.shootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
   // Initialize camera settings
   this.cameras.main.startFollow(this.player);
@@ -84,6 +89,17 @@ gameScene.update = function(time, delta) {
     player.rotation = angle;
   }
 
+  // playerShip fires laser when SPACE is cicked
+  if (Phaser.Input.Keyboard.JustDown(this.shootKey)) {
+    this.shootLaser();
+  }
+
+  this.lasers.getChildren().forEach(laser => {
+    if (laser.y < 0) {
+      laser.destroy();
+    }
+  });
+
   // Update and loop background positions
   this.bgSprites.forEach(bg => {
     bg.x -= dx;
@@ -95,6 +111,21 @@ gameScene.update = function(time, delta) {
   });
 };
 
+// Method to shoot lasers
+gameScene.shootLaser = function() {
+  let laser = this.lasers.create(this.player.x, this.player.y, 'laser1');
+  laser.setScale(0.2);
+  
+  // The player's angle in radians
+  const angleInRadians = this.player.rotation;
+  
+  // Calculate the velocity components based on the angle
+  const velocityX = Math.cos(angleInRadians) * 200;
+  const velocityY = Math.sin(angleInRadians) * 200;
+  
+  laser.setVelocity(velocityX, velocityY);
+};
+
 // Game configuration
 let config = {
   type: Phaser.AUTO,
@@ -104,6 +135,12 @@ let config = {
   },
   width: 987,
   height: 876,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      debug: false,
+    },
+  },
   scene: gameScene,
 };
 
