@@ -21,6 +21,7 @@ gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
   this.load.image('player', 'assets/images/playerShip.png');
   this.load.image('laser1', 'assets/images/laser1.png');
+  this.load.image('asteroid', 'assets/images/asteroid.png');
 };
 
 // Create game objects and initialize settings
@@ -54,6 +55,10 @@ gameScene.create = function() {
   // Initialize laser sprite
   this.lasers = this.physics.add.group();
   this.shootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+  // Initialize asteroid sprite
+  this.asteroids = this.physics.add.group();
+  this.time.addEvent({ delay: 1000, callback: this.spawnAsteroid, callbackScope: this, loop: true });
 
   // Initialize camera settings
   this.cameras.main.startFollow(this.player);
@@ -120,6 +125,12 @@ gameScene.update = function(time, delta) {
       laser.destroy();
     }
   });
+
+  this.asteroids.getChildren().forEach(asteroid => {
+    if (asteroid.x < 0 || asteroid.x > BG_WIDTH || asteroid.y < 0 || asteroid.y > BG_HEIGHT) {
+      asteroid.destroy();
+    }
+  });
 };
 
 // Method to shoot lasers
@@ -139,6 +150,42 @@ gameScene.shootLaser = function() {
   const velocityY = Math.sin(angleInRadians) * LASER_SPEED;
   
   laser.setVelocity(velocityX, velocityY);
+};
+
+gameScene.spawnAsteroid = function() {
+  // Generate random position and speed
+  let x, y, velocityX, velocityY;
+  let edge = Math.floor(Math.random() * 4);
+  let speed = Math.random() * 100 + 50; // between 50 and 150
+
+  // Determine spawn edge based on random number
+  switch(edge) {
+    case 0: // Top edge
+      x = Math.random() * BG_WIDTH;
+      y = 0;
+      velocityY = speed;
+      break;
+    case 1: // Right edge
+      x = BG_WIDTH;
+      y = Math.random() * BG_HEIGHT;
+      velocityX = -speed;
+      break;
+    case 2: // Bottom edge
+      x = Math.random() * BG_WIDTH;
+      y = BG_HEIGHT;
+      velocityY = -speed;
+      break;
+    case 3: // Left edge
+      x = 0;
+      y = Math.random() * BG_HEIGHT;
+      velocityX = speed;
+      break;
+  }
+
+  // Create asteroid and set properties
+  let asteroid = this.asteroids.create(x, y, 'asteroid');
+  asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
+  asteroid.setVelocity(velocityX, velocityY);
 };
 
 // Game configuration
