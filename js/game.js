@@ -163,7 +163,7 @@ gameScene.shootLaser = function() {
 
 gameScene.spawnAsteroid = function() {
   // Generate random position and speed
-  let x, y, velocityX = 0, velocityY = 0;
+  let x, y, velocityX = 0, velocityY = 0, rotation = 0;
   let edge = Math.floor(Math.random() * 4);
   let speed = Math.random() * 100 + 50; // between 50 and 150
 
@@ -173,26 +173,31 @@ gameScene.spawnAsteroid = function() {
       x = Math.random() * BG_WIDTH;
       y = 0;
       velocityY = speed;
+      rotation = 90; // Facing down
       break;
     case 1: // Right edge
       x = BG_WIDTH;
       y = Math.random() * BG_HEIGHT;
       velocityX = -speed;
+      rotation = 180; // Facing left
       break;
     case 2: // Bottom edge
       x = Math.random() * BG_WIDTH;
       y = BG_HEIGHT;
       velocityY = -speed;
+      rotation = 270; // Facing up
       break;
     case 3: // Left edge
       x = 0;
       y = Math.random() * BG_HEIGHT;
       velocityX = speed;
+      rotation = 0; // Facing right
       break;
   }
 
   // Create asteroid and set properties
   let asteroid = this.asteroids.create(x, y, 'asteroid');
+  asteroid.setRotation(Phaser.Math.DegToRad(rotation)); // Set rotation in radians
   asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
   asteroid.setVelocity(velocityX, velocityY);
   asteroid.setData('velocityX', velocityX);
