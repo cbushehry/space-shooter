@@ -60,6 +60,20 @@ gameScene.create = function() {
   this.asteroids = this.physics.add.group();
   this.time.addEvent({ delay: 1000, callback: this.spawnAsteroid, callbackScope: this, loop: true });
 
+  // Laser and Asteroid collision
+  this.physics.add.overlap(this.lasers, this.asteroids, (laser, asteroid) => {
+    laser.destroy();
+    asteroid.destroy();
+  }, null, this);
+
+  // Player and Asteroid collision (placeholder logic)
+  this.physics.add.collider(this.player, this.asteroids, () => {
+    // For now, just reset player position. You can replace this with health decrement later.
+    console.log("Collision detected!");
+    this.player.x = BG_WIDTH / 2;
+    this.player.y = BG_HEIGHT / 2;
+  }, null, this);
+
   // Initialize camera settings
   this.cameras.main.startFollow(this.player);
   this.cameras.main.setBounds(0, 0, BG_WIDTH, BG_HEIGHT);
