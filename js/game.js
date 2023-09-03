@@ -127,6 +127,15 @@ gameScene.update = function(time, delta) {
   });
 
   this.asteroids.getChildren().forEach(asteroid => {
+    // Update the position based on stored velocity and elapsed time
+    asteroid.x += asteroid.getData('velocityX') * delta / 1000;
+    asteroid.y += asteroid.getData('velocityY') * delta / 1000;
+  
+    // Now adjust the position based on the player's movement
+    asteroid.x -= dx;
+    asteroid.y -= dy - bgScrollSpeed * delta / 1000;
+  
+    // Destroy the asteroid if it's off-screen
     if (asteroid.x < 0 || asteroid.x > BG_WIDTH || asteroid.y < 0 || asteroid.y > BG_HEIGHT) {
       asteroid.destroy();
     }
@@ -154,7 +163,7 @@ gameScene.shootLaser = function() {
 
 gameScene.spawnAsteroid = function() {
   // Generate random position and speed
-  let x, y, velocityX, velocityY;
+  let x, y, velocityX = 0, velocityY = 0;
   let edge = Math.floor(Math.random() * 4);
   let speed = Math.random() * 100 + 50; // between 50 and 150
 
@@ -186,6 +195,8 @@ gameScene.spawnAsteroid = function() {
   let asteroid = this.asteroids.create(x, y, 'asteroid');
   asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
   asteroid.setVelocity(velocityX, velocityY);
+  asteroid.setData('velocityX', velocityX);
+  asteroid.setData('velocityY', velocityY);
 };
 
 // Game configuration
