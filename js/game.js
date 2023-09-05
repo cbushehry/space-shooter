@@ -46,7 +46,7 @@ gameScene.create = function() {
   this.keyD = this.input.keyboard.addKey(KEY_D);
 
   // Initialize player sprite
-  this.player = this.add.sprite(BG_WIDTH / 2, BG_HEIGHT / 2, 'player');
+  this.player = this.physics.add.sprite(BG_WIDTH / 2, BG_HEIGHT / 2, 'player');
   this.player.setScale(PLAYER_INITIAL_SCALE);
   this.player.setOrigin(0.4, 0.5);  //player.setOrigin(0.4, 0.5) so playerShip spins from thrusters
   this.player.angle = PLAYER_INITIAL_ANGLE;
@@ -59,6 +59,11 @@ gameScene.create = function() {
   // Initialize asteroid sprite
   this.asteroids = this.physics.add.group();
   this.time.addEvent({ delay: 1000, callback: this.spawnAsteroid, callbackScope: this, loop: true });
+
+  this.physics.add.collider(this.lasers, this.asteroids, function(laser, asteroid) {
+    laser.destroy();
+    asteroid.destroy();
+  }, null, this);
 
   // Initialize camera settings
   this.cameras.main.startFollow(this.player);
