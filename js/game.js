@@ -65,6 +65,14 @@ gameScene.create = function() {
     asteroid.destroy();
   }, null, this);
 
+  this.physics.add.collider(this.player, this.asteroids, function(player, asteroid) {
+    // Logic for what happens when the player and an asteroid collide
+    console.log("Player hit!");
+    // For now we will just destroy the asteroid
+    // Later we can add logic here to decrease player's health, create an explosion, etc.
+    asteroid.destroy();
+}, null, this);
+
   // Initialize camera settings
   this.cameras.main.startFollow(this.player);
   this.cameras.main.setBounds(0, 0, BG_WIDTH, BG_HEIGHT);
