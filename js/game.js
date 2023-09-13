@@ -19,12 +19,19 @@ const LASER_SPEED = 1000;
 // Preload assets
 gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
+
   this.load.image('player1', 'assets/images/playerShip1.png');
   this.load.image('player2', 'assets/images/playerShip2.png');
   this.load.image('player3', 'assets/images/playerShip3.png');
   this.load.image('player4', 'assets/images/playerShip4.png');
+
   this.load.image('laser1', 'assets/images/laser1.png');
-  this.load.image('asteroid', 'assets/images/asteroid.png');
+
+  this.load.image('asteroid1', 'assets/images/asteroid1.png');
+  this.load.image('asteroid2', 'assets/images/asteroid2.png');
+  this.load.image('asteroid3', 'assets/images/asteroid3.png');
+  this.load.image('asteroid4', 'assets/images/asteroid4.png');
+  this.load.image('asteroid5', 'assets/images/asteroid5.png');
 };
 
 // Create game objects and initialize settings
@@ -71,6 +78,18 @@ gameScene.create = function() {
   // Initialize laser sprite
   this.lasers = this.physics.add.group();
   this.shootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+  this.anims.create({
+    key: 'asteroidFly',
+    frames: [
+        { key: 'asteroid1' },
+        { key: 'asteroid2' },
+        { key: 'asteroid3' },
+        { key: 'asteroid4' },
+    ],
+    frameRate: 13, // Adjust the frame rate to get the desired effect
+    repeat: -1, // This will make the animation loop indefinitely
+  });
 
   // Initialize asteroid sprite
   this.asteroids = this.physics.add.group();
@@ -216,6 +235,7 @@ gameScene.spawnAsteroid = function() {
   asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
   asteroid.setData('velocityX', velocityX);
   asteroid.setData('velocityY', velocityY);
+  asteroid.play('asteroidFly');
 
   console.log('Asteroid spawned', {x, y, rotation, velocityX, velocityY}); // Log asteroid details to console
 };
