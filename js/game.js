@@ -164,17 +164,17 @@ gameScene.update = function(time, delta) {
     asteroid.x -= dx;
     asteroid.y -= dy - bgScrollSpeed * delta / 1000;
   
-    // Destroy the asteroid if it's off-screen
-    if (asteroid.x < 0 || asteroid.x > BG_WIDTH || asteroid.y < 0 || asteroid.y > BG_HEIGHT) {
-      asteroid.destroy();
+    // Destroy the asteroid if it's off-screen on the left side
+    if (asteroid.x < -500) {  // Adjust -20 to fit the width of your asteroid sprite
+        asteroid.destroy();
     }
-  });
+});
 };
 
 // Method to shoot lasers
 gameScene.shootLaser = function() {
   let laser = this.lasers.create(this.player.x, this.player.y, 'laser1');
-  laser.setScale(0.2);
+  laser.setScale(0.8);
   
   // Set the laser's rotation to match the player's rotation
   laser.rotation = this.player.rotation;
@@ -192,45 +192,32 @@ gameScene.shootLaser = function() {
 
 gameScene.spawnAsteroid = function() {
   // Generate random position and speed
-  let x, y, velocityX = 0, velocityY = 0, rotation = 0;
-  let edge = Math.floor(Math.random() * 4);
-  let speed = Math.random() * 100 + 50; // between 50 and 150
+  let x, y, velocityX = 1000, velocityY = 1000;
 
-  // Determine spawn edge based on random number
-  switch(edge) {
-    case 0: // Top edge
-      x = Math.random() * BG_WIDTH;
-      y = 0;
-      velocityY = speed;
-      rotation = 90; // Facing down
-      break;
-    case 1: // Right edge
-      x = BG_WIDTH;
-      y = Math.random() * BG_HEIGHT;
-      velocityX = -speed;
-      rotation = 180; // Facing left
-      break;
-    case 2: // Bottom edge
-      x = Math.random() * BG_WIDTH;
-      y = BG_HEIGHT;
-      velocityY = -speed;
-      rotation = 270; // Facing up
-      break;
-    case 3: // Left edge
-      x = 0;
-      y = Math.random() * BG_HEIGHT;
-      velocityX = speed;
-      rotation = 0; // Facing right
-      break;
-  }
+  // Set up position to spawn from the right side
+  x = BG_WIDTH; // Spawn a bit outside of the screen
+  y = Math.random() * BG_HEIGHT; // Random position along the right side
 
+  let speed = Math.random() * 100 + 50; // Speed between 50 and 150
+
+  // Setting angle to move asteroids from right to left horizontally
+  let angle = Phaser.Math.DegToRad(180); // 180 degrees, pointing left
+
+  // Determine velocity based on the angle and speed
+  velocityX = Math.cos(angle) * speed;
+  velocityY = Math.sin(angle) * speed;
+
+  // Set rotation to match the movement direction
+  let rotation = angle; // Set rotation in radians (not degrees)
+  
   // Create asteroid and set properties
   let asteroid = this.asteroids.create(x, y, 'asteroid');
-  asteroid.setRotation(Phaser.Math.DegToRad(rotation)); // Set rotation in radians
+  asteroid.setRotation(rotation); // Set rotation in radians
   asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
-  asteroid.setVelocity(velocityX, velocityY);
   asteroid.setData('velocityX', velocityX);
   asteroid.setData('velocityY', velocityY);
+
+  console.log('Asteroid spawned', {x, y, rotation, velocityX, velocityY}); // Log asteroid details to console
 };
 
 // Game configuration
