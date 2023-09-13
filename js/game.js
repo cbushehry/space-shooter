@@ -86,10 +86,11 @@ gameScene.create = function() {
         { key: 'asteroid2' },
         { key: 'asteroid3' },
         { key: 'asteroid4' },
+        { key: 'asteroid5' },  // Adding asteroid5 here
     ],
-    frameRate: 13, // Adjust the frame rate to get the desired effect
-    repeat: -1, // This will make the animation loop indefinitely
-  });
+    frameRate: 13, 
+    repeat: -1,
+});
 
   // Initialize asteroid sprite
   this.asteroids = this.physics.add.group();
@@ -230,7 +231,8 @@ gameScene.spawnAsteroid = function() {
   let rotation = angle; // Set rotation in radians (not degrees)
   
   // Create asteroid and set properties
-  let asteroid = this.asteroids.create(x, y, 'asteroid');
+  let asteroidKey = 'asteroid' + Phaser.Math.Between(1, 5);  // This will randomly choose a number between 1 and 5
+  let asteroid = this.asteroids.create(x, y, asteroidKey);
   asteroid.setRotation(rotation); // Set rotation in radians
   asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
   asteroid.setData('velocityX', velocityX);
