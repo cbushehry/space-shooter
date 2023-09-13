@@ -19,7 +19,10 @@ const LASER_SPEED = 1000;
 // Preload assets
 gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
-  this.load.image('player', 'assets/images/playerShip.png');
+  this.load.image('player1', 'assets/images/playerShip1.png');
+  this.load.image('player2', 'assets/images/playerShip2.png');
+  this.load.image('player3', 'assets/images/playerShip3.png');
+  this.load.image('player4', 'assets/images/playerShip4.png');
   this.load.image('laser1', 'assets/images/laser1.png');
   this.load.image('asteroid', 'assets/images/asteroid.png');
 };
@@ -45,12 +48,25 @@ gameScene.create = function() {
   this.keyS = this.input.keyboard.addKey(KEY_S);
   this.keyD = this.input.keyboard.addKey(KEY_D);
 
+  this.anims.create({
+    key: 'fly',
+    frames: [
+        { key: 'player1' },
+        { key: 'player2' },
+        { key: 'player3' },
+        { key: 'player4' },
+    ],
+    frameRate: 10,  // Adjust the frame rate to get the desired effect
+    repeat: -1, // This will make the animation loop indefinitely
+});
+
   // Initialize player sprite
   this.player = this.physics.add.sprite(BG_WIDTH / 2, BG_HEIGHT / 2, 'player');
-  this.player.setScale(PLAYER_INITIAL_SCALE);
   this.player.setOrigin(0.4, 0.5);  //player.setOrigin(0.4, 0.5) so playerShip spins from thrusters
+  this.player.setScale(PLAYER_INITIAL_SCALE);
   this.player.angle = PLAYER_INITIAL_ANGLE;
   this.player.setDepth(1);
+  this.player.play('fly');
 
   // Initialize laser sprite
   this.lasers = this.physics.add.group();
