@@ -111,7 +111,7 @@ this.anims.create({
   repeat: 0,
 });
 
-  // Initialize asteroid sprite
+  // Initialize asteroid sprites
   this.asteroids = this.physics.add.group();
   this.time.addEvent({ delay: 1000, callback: this.spawnAsteroid, callbackScope: this, loop: true });
 
