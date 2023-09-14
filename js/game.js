@@ -117,7 +117,16 @@ this.anims.create({
 
   this.physics.add.collider(this.lasers, this.asteroids, function(laser, asteroid) {
     laser.destroy();
+    let scale = asteroid.scale; // Get the scale of the asteroid
     asteroid.destroy();
+    this.createExplosion(asteroid.x, asteroid.y, scale); // Pass the scale to the method
+  }, null, this);
+  
+  this.physics.add.collider(this.player, this.asteroids, function(player, asteroid) {
+    console.log("Player hit!");
+    let scale = asteroid.scale; // Get the scale of the asteroid
+    asteroid.destroy();
+    this.createExplosion(asteroid.x, asteroid.y, scale); // Pass the scale to the method
   }, null, this);
 
   // Initialize camera settings
