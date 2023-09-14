@@ -32,6 +32,12 @@ gameScene.preload = function() {
   this.load.image('asteroid3', 'assets/images/asteroid3.png');
   this.load.image('asteroid4', 'assets/images/asteroid4.png');
   this.load.image('asteroid5', 'assets/images/asteroid5.png');
+
+  this.load.image('explosion1', 'assets/images/explosion1.png');
+  this.load.image('explosion2', 'assets/images/explosion2.png');
+  this.load.image('explosion3', 'assets/images/explosion3.png');
+  this.load.image('explosion4', 'assets/images/explosion4.png');
+  this.load.image('explosion5', 'assets/images/explosion5.png');
 };
 
 // Create game objects and initialize settings
@@ -63,7 +69,7 @@ gameScene.create = function() {
         { key: 'player3' },
         { key: 'player4' },
     ],
-    frameRate: 10,  // Adjust the frame rate to get the desired effect
+    frameRate: 13,  // Adjust the frame rate to get the desired effect
     repeat: -1, // This will make the animation loop indefinitely
 });
 
@@ -88,8 +94,21 @@ gameScene.create = function() {
         { key: 'asteroid4' },
         { key: 'asteroid5' },  // Adding asteroid5 here
     ],
-    frameRate: 13, 
+    frameRate: 12, 
     repeat: -1,
+});
+
+this.anims.create({
+  key: 'explosionAnim',
+  frames: [
+      { key: 'explosion1' },
+      { key: 'explosion2' },
+      { key: 'explosion3' },
+      { key: 'explosion4' },
+      { key: 'explosion5' },
+  ],
+  frameRate: 20,
+  repeat: 0,
 });
 
   // Initialize asteroid sprite
@@ -98,16 +117,17 @@ gameScene.create = function() {
 
   this.physics.add.collider(this.lasers, this.asteroids, function(laser, asteroid) {
     laser.destroy();
+    let scale = asteroid.scale; // Get the scale of the asteroid
     asteroid.destroy();
+    this.createExplosion(asteroid.x, asteroid.y, scale); // Pass the scale to the method
   }, null, this);
-
+  
   this.physics.add.collider(this.player, this.asteroids, function(player, asteroid) {
-    // Logic for what happens when the player and an asteroid collide
     console.log("Player hit!");
-    // For now we will just destroy the asteroid
-    // Later we can add logic here to decrease player's health, create an explosion, etc.
+    let scale = asteroid.scale; // Get the scale of the asteroid
     asteroid.destroy();
-}, null, this);
+    this.createExplosion(asteroid.x, asteroid.y, scale); // Pass the scale to the method
+  }, null, this);
 
   // Initialize camera settings
   this.cameras.main.startFollow(this.player);
@@ -218,7 +238,7 @@ gameScene.spawnAsteroid = function() {
   x = BG_WIDTH; // Spawn a bit outside of the screen
   y = Math.random() * BG_HEIGHT; // Random position along the right side
 
-  let speed = Math.random() * 100 + 50; // Speed between 50 and 150
+  let speed = Math.random() * 250 + 50; // Speed between 50 and 300
 
   // Setting angle to move asteroids from right to left horizontally
   let angle = Phaser.Math.DegToRad(180); // 180 degrees, pointing left
@@ -240,6 +260,15 @@ gameScene.spawnAsteroid = function() {
   asteroid.play('asteroidFly');
 
   console.log('Asteroid spawned', {x, y, rotation, velocityX, velocityY}); // Log asteroid details to console
+};
+
+gameScene.createExplosion = function(x, y, scale) {
+  let explosion = this.add.sprite(x, y, 'explosion1');
+  explosion.setScale(scale); // Set the scale of the explosion to match the asteroid
+  explosion.play('explosionAnim');
+  explosion.on('animationcomplete', () => {
+    explosion.destroy();
+  });
 };
 
 // Game configuration
