@@ -202,7 +202,7 @@ gameScene.update = function(time, delta) {
   
     // Now adjust the position based on the player's movement
     asteroid.x -= dx;
-    asteroid.y -= dy - bgScrollSpeed * delta / 1000;
+    asteroid.y -= dy;
   
     // Destroy the asteroid if it's off-screen on the left side
     if (asteroid.x < -500) {  // Adjust -20 to fit the width of your asteroid sprite
@@ -235,13 +235,15 @@ gameScene.spawnAsteroid = function() {
   let x, y, velocityX = 1000, velocityY = 1000;
 
   // Set up position to spawn from the right side
-  x = BG_WIDTH; // Spawn a bit outside of the screen
+  x = BG_WIDTH + 300; // Spawn a bit outside of the screen
   y = Math.random() * BG_HEIGHT; // Random position along the right side
 
-  let speed = Math.random() * 250 + 50; // Speed between 50 and 300
+  let speed = Math.random() * 300 + 100; // Speed between 100 and 400
 
   // Setting angle to move asteroids from right to left horizontally
-  let angle = Phaser.Math.DegToRad(180); // 180 degrees, pointing left
+  let baseAngle = 180; // 180 degrees, pointing left
+  let randomAngleOffset = Phaser.Math.Between(-15, 15); // Random angle offset between -15 and +15 degrees
+  let angle = Phaser.Math.DegToRad(baseAngle + randomAngleOffset); // Add the random offset to the base angle
 
   // Determine velocity based on the angle and speed
   velocityX = Math.cos(angle) * speed;
@@ -254,7 +256,7 @@ gameScene.spawnAsteroid = function() {
   let asteroidKey = 'asteroid' + Phaser.Math.Between(1, 5);  // This will randomly choose a number between 1 and 5
   let asteroid = this.asteroids.create(x, y, asteroidKey);
   asteroid.setRotation(rotation); // Set rotation in radians
-  asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
+  asteroid.setScale(Math.random() * 0.3 + 0.12); // Scale between 0.2 and 0.34
   asteroid.setData('velocityX', velocityX);
   asteroid.setData('velocityY', velocityY);
   asteroid.play('asteroidFly');
