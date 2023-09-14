@@ -19,9 +19,25 @@ const LASER_SPEED = 1000;
 // Preload assets
 gameScene.preload = function() {
   this.load.image('background', 'assets/images/background.png');
-  this.load.image('player', 'assets/images/playerShip.png');
+
+  this.load.image('player1', 'assets/images/playerShip1.png');
+  this.load.image('player2', 'assets/images/playerShip2.png');
+  this.load.image('player3', 'assets/images/playerShip3.png');
+  this.load.image('player4', 'assets/images/playerShip4.png');
+
   this.load.image('laser1', 'assets/images/laser1.png');
-  this.load.image('asteroid', 'assets/images/asteroid.png');
+
+  this.load.image('asteroid1', 'assets/images/asteroid1.png');
+  this.load.image('asteroid2', 'assets/images/asteroid2.png');
+  this.load.image('asteroid3', 'assets/images/asteroid3.png');
+  this.load.image('asteroid4', 'assets/images/asteroid4.png');
+  this.load.image('asteroid5', 'assets/images/asteroid5.png');
+
+  this.load.image('explosion1', 'assets/images/explosion1.png');
+  this.load.image('explosion2', 'assets/images/explosion2.png');
+  this.load.image('explosion3', 'assets/images/explosion3.png');
+  this.load.image('explosion4', 'assets/images/explosion4.png');
+  this.load.image('explosion5', 'assets/images/explosion5.png');
 };
 
 // Create game objects and initialize settings
@@ -45,20 +61,64 @@ gameScene.create = function() {
   this.keyS = this.input.keyboard.addKey(KEY_S);
   this.keyD = this.input.keyboard.addKey(KEY_D);
 
+  this.anims.create({
+    key: 'fly',
+    frames: [
+        { key: 'player1' },
+        { key: 'player2' },
+        { key: 'player3' },
+        { key: 'player4' },
+    ],
+    frameRate: 13,  // Adjust the frame rate to get the desired effect
+    repeat: -1, // This will make the animation loop indefinitely
+});
+
   // Initialize player sprite
   this.player = this.physics.add.sprite(BG_WIDTH / 2, BG_HEIGHT / 2, 'player');
-  this.player.setScale(PLAYER_INITIAL_SCALE);
   this.player.setOrigin(0.4, 0.5);  //player.setOrigin(0.4, 0.5) so playerShip spins from thrusters
+  this.player.setScale(PLAYER_INITIAL_SCALE);
   this.player.angle = PLAYER_INITIAL_ANGLE;
   this.player.setDepth(1);
+  this.player.play('fly');
 
   // Initialize laser sprite
   this.lasers = this.physics.add.group();
   this.shootKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+  this.anims.create({
+    key: 'asteroidFly',
+    frames: [
+        { key: 'asteroid1' },
+        { key: 'asteroid2' },
+        { key: 'asteroid3' },
+        { key: 'asteroid4' },
+        { key: 'asteroid5' },  // Adding asteroid5 here
+    ],
+    frameRate: 12, 
+    repeat: -1,
+});
+
+this.anims.create({
+  key: 'explosionAnim',
+  frames: [
+      { key: 'explosion1' },
+      { key: 'explosion2' },
+      { key: 'explosion3' },
+      { key: 'explosion4' },
+      { key: 'explosion5' },
+  ],
+  frameRate: 20,
+  repeat: 0,
+});
+
   // Initialize asteroid sprite
   this.asteroids = this.physics.add.group();
   this.time.addEvent({ delay: 1000, callback: this.spawnAsteroid, callbackScope: this, loop: true });
+
+  this.physics.add.collider(this.lasers, this.asteroids, function(laser, asteroid) {
+    laser.destroy();
+    asteroid.destroy();
+  }, null, this);
 
   // Initialize camera settings
   this.cameras.main.startFollow(this.player);
@@ -135,17 +195,17 @@ gameScene.update = function(time, delta) {
     asteroid.x -= dx;
     asteroid.y -= dy - bgScrollSpeed * delta / 1000;
   
-    // Destroy the asteroid if it's off-screen
-    if (asteroid.x < 0 || asteroid.x > BG_WIDTH || asteroid.y < 0 || asteroid.y > BG_HEIGHT) {
-      asteroid.destroy();
+    // Destroy the asteroid if it's off-screen on the left side
+    if (asteroid.x < -500) {  // Adjust -20 to fit the width of your asteroid sprite
+        asteroid.destroy();
     }
-  });
+});
 };
 
 // Method to shoot lasers
 gameScene.shootLaser = function() {
   let laser = this.lasers.create(this.player.x, this.player.y, 'laser1');
-  laser.setScale(0.2);
+  laser.setScale(0.8);
   
   // Set the laser's rotation to match the player's rotation
   laser.rotation = this.player.rotation;
@@ -163,45 +223,43 @@ gameScene.shootLaser = function() {
 
 gameScene.spawnAsteroid = function() {
   // Generate random position and speed
-  let x, y, velocityX = 0, velocityY = 0, rotation = 0;
-  let edge = Math.floor(Math.random() * 4);
-  let speed = Math.random() * 100 + 50; // between 50 and 150
+  let x, y, velocityX = 1000, velocityY = 1000;
 
-  // Determine spawn edge based on random number
-  switch(edge) {
-    case 0: // Top edge
-      x = Math.random() * BG_WIDTH;
-      y = 0;
-      velocityY = speed;
-      rotation = 90; // Facing down
-      break;
-    case 1: // Right edge
-      x = BG_WIDTH;
-      y = Math.random() * BG_HEIGHT;
-      velocityX = -speed;
-      rotation = 180; // Facing left
-      break;
-    case 2: // Bottom edge
-      x = Math.random() * BG_WIDTH;
-      y = BG_HEIGHT;
-      velocityY = -speed;
-      rotation = 270; // Facing up
-      break;
-    case 3: // Left edge
-      x = 0;
-      y = Math.random() * BG_HEIGHT;
-      velocityX = speed;
-      rotation = 0; // Facing right
-      break;
-  }
+  // Set up position to spawn from the right side
+  x = BG_WIDTH; // Spawn a bit outside of the screen
+  y = Math.random() * BG_HEIGHT; // Random position along the right side
 
+  let speed = Math.random() * 250 + 50; // Speed between 50 and 300
+
+  // Setting angle to move asteroids from right to left horizontally
+  let angle = Phaser.Math.DegToRad(180); // 180 degrees, pointing left
+
+  // Determine velocity based on the angle and speed
+  velocityX = Math.cos(angle) * speed;
+  velocityY = Math.sin(angle) * speed;
+
+  // Set rotation to match the movement direction
+  let rotation = angle; // Set rotation in radians (not degrees)
+  
   // Create asteroid and set properties
-  let asteroid = this.asteroids.create(x, y, 'asteroid');
-  asteroid.setRotation(Phaser.Math.DegToRad(rotation)); // Set rotation in radians
+  let asteroidKey = 'asteroid' + Phaser.Math.Between(1, 5);  // This will randomly choose a number between 1 and 5
+  let asteroid = this.asteroids.create(x, y, asteroidKey);
+  asteroid.setRotation(rotation); // Set rotation in radians
   asteroid.setScale(Math.random() * 0.2 + 0.1); // Scale between 0.1 and 0.3
-  asteroid.setVelocity(velocityX, velocityY);
   asteroid.setData('velocityX', velocityX);
   asteroid.setData('velocityY', velocityY);
+  asteroid.play('asteroidFly');
+
+  console.log('Asteroid spawned', {x, y, rotation, velocityX, velocityY}); // Log asteroid details to console
+};
+
+gameScene.createExplosion = function(x, y, scale) {
+  let explosion = this.add.sprite(x, y, 'explosion1');
+  explosion.setScale(scale); // Set the scale of the explosion to match the asteroid
+  explosion.play('explosionAnim');
+  explosion.on('animationcomplete', () => {
+    explosion.destroy();
+  });
 };
 
 // Game configuration
