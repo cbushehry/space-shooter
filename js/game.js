@@ -214,7 +214,7 @@ gameScene.update = function(time, delta) {
 // Method to shoot lasers
 gameScene.shootLaser = function() {
   let laser = this.lasers.create(this.player.x, this.player.y, 'laser1');
-  laser.setScale(0.8);
+  laser.setScale(0.14);
   
   // Set the laser's rotation to match the player's rotation
   laser.rotation = this.player.rotation;
