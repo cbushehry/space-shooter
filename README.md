@@ -1,2 +1,2 @@
 # space-shooter-1
-Phaser.js space game where players navigate and defend the cosmos from enemy ships
+First attempt to make a space shooter with phaser 3
