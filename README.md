@@ -1,2 +1,2 @@
-# interstellar-interceptor
+# space-shooter-1
 Phaser.js space game where players navigate and defend the cosmos from enemy ships
